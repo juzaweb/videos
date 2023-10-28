@@ -1,0 +1,27 @@
+{
+    "name": "juzaweb/videos",
+    "type": "juzaweb-plugin",
+    "license": "MIT",
+    "homepage": "https://juzaweb.com",
+    "description": "Manage your videos content with Juzaweb plugin",
+    "extra": {
+        "juzaweb": {
+            "name": "Videos Management",
+            "domain": "jw_videos",
+            "cms_min": "3.3",
+            "version": "1.0",
+            "providers": [
+                "Juzaweb\\Videos\\Providers\\VideosServiceProvider"
+            ]
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Juzaweb\\Videos\\": "src/"
+        }
+    },
+    "require-dev": {
+        "juzaweb/modules": "^1.0",
+        "juzaweb/dev-tool": "^1.0"
+    }
+}
