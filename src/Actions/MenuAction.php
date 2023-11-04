@@ -28,6 +28,17 @@ class MenuAction extends Action
                     'source_url' => [
                         'type' => 'upload_url',
                         'label' => trans('Source URL'),
+                    ],
+                    'video_quality' => [
+                        'type' => 'select',
+                        'label' => trans('Video Quality'),
+                        'data' => [
+                            'options' => [
+                                'HD' => 'HD',
+                                'Full HD' => 'Full HD',
+                                'SD' => 'SD',
+                            ]
+                        ]
                     ]
                 ]
             ]
