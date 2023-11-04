@@ -8,8 +8,6 @@
         "juzaweb": {
             "name": "Videos Management",
             "domain": "jw_videos",
-            "cms_min": "3.3",
-            "version": "1.0",
             "providers": [
                 "Juzaweb\\Videos\\Providers\\VideosServiceProvider"
             ]
