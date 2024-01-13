@@ -10,7 +10,8 @@
             "domain": "jw_videos",
             "providers": [
                 "Juzaweb\\Videos\\Providers\\VideosServiceProvider"
-            ]
+            ],
+            "networkable": true
         }
     },
     "autoload": {
