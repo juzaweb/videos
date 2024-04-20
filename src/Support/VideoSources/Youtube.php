@@ -11,6 +11,7 @@
 namespace Juzaweb\Videos\Support\VideoSources;
 
 use Google\Service\YouTube as YoutubeService;
+use Illuminate\Support\Collection;
 use Juzaweb\Videos\Contracts\VideoSource;
 use Google\Client as GoogleClient;
 
@@ -22,12 +23,47 @@ class Youtube implements VideoSource
     {
     }
 
-    public function get(string $video)
+    public function get(string $video): array
     {
         $youtube = new YoutubeService($this->getGoogleClient());
-        $youtube->videos->listVideos('id,snippet', $video);
+        $videos = $youtube->videos->listVideos('id,snippet', ['id' => $video]);
 
-        return [];
+        return $this->getDataVideo($videos->getItems()[0]);
+    }
+
+    public function search(string $keyword): Collection
+    {
+        $youtube = new YoutubeService($this->getGoogleClient());
+        $videos = $youtube->search->listSearch(
+            'id,snippet',
+            [
+                'q' => $keyword,
+                'maxResults' => 50,
+                'type' => 'video',
+            ]
+        );
+
+        $result = new Collection();
+        foreach ($videos->getItems() as $video) {
+            $result->push($this->getDataVideo($video));
+        }
+
+        return $result;
+    }
+
+    protected function getDataVideo(YoutubeService\Video|YoutubeService\SearchResult $video): array
+    {
+        $videoId = $video instanceof YoutubeService\Video ? $video->getId() : $video->id->videoId;
+
+        return [
+            'title' => $video->getSnippet()->title,
+            'content' => nl2br($video->getSnippet()->description),
+            'thumbnail' => $video->getSnippet()->thumbnails->high->url,
+            'tags' => $video->getSnippet()->tags,
+            'extends' => [
+                'url' => 'https://www.youtube.com/watch?v=' . $videoId,
+            ],
+        ];
     }
 
     protected function getGoogleClient(): GoogleClient
@@ -37,7 +73,7 @@ class Youtube implements VideoSource
         }
 
         $client = new GoogleClient();
-        $client->setDeveloperKey('AIzaSyD3FmDdW5w2Z5w5Hn9LbHn9eJxYzRZKoqY');
+        $client->setDeveloperKey($this->config['api_key']);
         return $this->client = $client;
     }
 }
