@@ -11,7 +11,13 @@ class VideosServiceProvider extends ServiceProvider
 {
     public function boot(): void
     {
-        $this->app[VideoSourceManager::class]->register('youtube', VideoSources\Youtube::class);
+        $this->app[VideoSourceManager::class]->register('youtube', VideoSources\Youtube::class, [
+            'regex' => [
+                '/https?:\/\/www\.youtube\.com\/watch\?v=([a-zA-Z0-9_-]+)/',
+                '/https?:\/\/youtu\.be\/([a-zA-Z0-9_-]+)/',
+                '/https?:\/\/www\.youtube\.com\/embed\/([a-zA-Z0-9_-]+)/',
+            ],
+        ]);
 
         $this->registerHookActions([MenuAction::class]);
     }

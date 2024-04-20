@@ -29,6 +29,27 @@ class VideoSourceManager implements VideoSourceManagerContract
         return static::$sources[$key] ?? null;
     }
 
+    public function guess(string $url): ?VideoSource
+    {
+        foreach ($this->list() as $key => $item) {
+            if (empty($item['regex'])) {
+                continue;
+            }
+
+            if (is_array($item['regex'])) {
+                foreach ($item['regex'] as $regex) {
+                    if (preg_match($regex, $url)) {
+                        return $this->find($key);
+                    }
+                }
+            } elseif (preg_match($item['regex'], $url)) {
+                return $this->find($key);
+            }
+        }
+
+        return null;
+    }
+
     public function list(): array
     {
         return static::$sources;
