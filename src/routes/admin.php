@@ -10,3 +10,7 @@
 | contains the "admin" middleware group. Now create something great!
 |
 */
+
+use Juzaweb\Videos\Http\Controllers\VideoController;
+
+Route::post('videos/import', [VideoController::class, 'import']);

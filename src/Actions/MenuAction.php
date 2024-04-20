@@ -9,6 +9,11 @@ class MenuAction extends Action
     public function handle(): void
     {
         $this->addAction(Action::INIT_ACTION, [$this, 'init']);
+        $this->addAction('post_type.videos.btn_group', [$this, 'addImportButton']);
+        $this->addAction(
+            'post_type.videos.index',
+            [$this, 'addModalImport']
+        );
     }
 
     public function init(): void
@@ -43,5 +48,17 @@ class MenuAction extends Action
                 ]
             ]
         );
+    }
+
+    public function addImportButton(): void
+    {
+        echo '<a href="javascript:void(0)" class="btn btn-primary" data-toggle="modal" data-target="#import-modal">
+        <i class="fa fa-download"></i> '. __('Import') .'
+        </a>';
+    }
+
+    public function addModalImport(): void
+    {
+        echo view('jw_videos::components.import')->render();
     }
 }
