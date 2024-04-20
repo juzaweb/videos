@@ -3,6 +3,7 @@
 namespace Juzaweb\Videos\Providers;
 
 use Juzaweb\CMS\Support\ServiceProvider;
+use Juzaweb\Videos\Actions\ConfigAction;
 use Juzaweb\Videos\Actions\MenuAction;
 use Juzaweb\Videos\Contracts\VideoSourceManager;
 use Juzaweb\Videos\Support\VideoSources;
@@ -17,9 +18,10 @@ class VideosServiceProvider extends ServiceProvider
                 '/https?:\/\/youtu\.be\/([a-zA-Z0-9_-]+)/',
                 '/https?:\/\/www\.youtube\.com\/embed\/([a-zA-Z0-9_-]+)/',
             ],
+            'api_key' => config('youtube_api_key'),
         ]);
 
-        $this->registerHookActions([MenuAction::class]);
+        $this->registerHookActions([MenuAction::class, ConfigAction::class]);
     }
 
     public function register(): void
