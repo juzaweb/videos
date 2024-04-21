@@ -26,7 +26,8 @@ class Youtube implements VideoSource
     public function get(string $video): array
     {
         $youtube = new YoutubeService($this->getGoogleClient());
-        $videos = $youtube->videos->listVideos('id,snippet', ['id' => $video]);
+
+        $videos = $youtube->videos->listVideos('id,snippet', ['id' => get_youtube_id($video)]);
 
         return $this->getDataVideo($videos->getItems()[0]);
     }
@@ -60,8 +61,8 @@ class Youtube implements VideoSource
             'content' => nl2br($video->getSnippet()->description),
             'thumbnail' => $video->getSnippet()->thumbnails->high->url,
             'tags' => $video->getSnippet()->tags,
-            'extends' => [
-                'url' => 'https://www.youtube.com/watch?v=' . $videoId,
+            'meta' => [
+                'source_url' => 'https://www.youtube.com/watch?v=' . $videoId,
             ],
         ];
     }

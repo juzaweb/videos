@@ -13,4 +13,4 @@
 
 use Juzaweb\Videos\Http\Controllers\VideoController;
 
-Route::post('videos/import', [VideoController::class, 'import']);
+Route::post('videos/import', [VideoController::class, 'import'])->name('admin.videos.import');

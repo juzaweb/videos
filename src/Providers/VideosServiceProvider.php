@@ -18,7 +18,7 @@ class VideosServiceProvider extends ServiceProvider
                 '/https?:\/\/youtu\.be\/([a-zA-Z0-9_-]+)/',
                 '/https?:\/\/www\.youtube\.com\/embed\/([a-zA-Z0-9_-]+)/',
             ],
-            'api_key' => config('youtube_api_key'),
+            'api_key' => get_config('youtube_api_key'),
         ]);
 
         $this->registerHookActions([MenuAction::class, ConfigAction::class]);
@@ -28,8 +28,8 @@ class VideosServiceProvider extends ServiceProvider
     {
         $this->app->singleton(
             VideoSourceManager::class,
-            function () {
-                return new \Juzaweb\Videos\Support\VideoSourceManager();
+            function ($app) {
+                return new \Juzaweb\Videos\Support\VideoSourceManager($app);
             }
         );
     }

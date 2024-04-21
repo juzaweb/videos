@@ -10,12 +10,19 @@
 
 namespace Juzaweb\Videos\Support;
 
+use Juzaweb\Backend\Models\Post;
+use Juzaweb\Backend\Repositories\PostRepository;
+use Juzaweb\CMS\Support\Application;
 use Juzaweb\Videos\Contracts\VideoSource;
 use Juzaweb\Videos\Contracts\VideoSourceManager as VideoSourceManagerContract;
 
 class VideoSourceManager implements VideoSourceManagerContract
 {
     protected static array $sources = [];
+
+    public function __construct(protected Application $app)
+    {
+    }
 
     public function register(string $key, string $class, array $config = []): void
     {
@@ -26,7 +33,11 @@ class VideoSourceManager implements VideoSourceManagerContract
 
     public function find(string $key): ?VideoSource
     {
-        return static::$sources[$key] ?? null;
+        if (isset(static::$sources[$key])) {
+            return new static::$sources[$key]['class'](static::$sources[$key]);
+        }
+
+        return null;
     }
 
     public function guess(string $url): ?VideoSource
@@ -48,6 +59,18 @@ class VideoSourceManager implements VideoSourceManagerContract
         }
 
         return null;
+    }
+
+    public function import(VideoSource $source, string $url): Post
+    {
+        $data = $source->get($url);
+        $data['type'] = 'videos';
+
+        $post = $this->app[PostRepository::class]->create($data);
+
+        $post->setMeta('source_url', $url);
+
+        return $post;
     }
 
     public function list(): array
