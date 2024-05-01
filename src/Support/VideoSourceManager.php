@@ -61,10 +61,11 @@ class VideoSourceManager implements VideoSourceManagerContract
         return null;
     }
 
-    public function import(VideoSource $source, string $url): Post
+    public function import(VideoSource $source, string $url, array $append = []): Post
     {
         $data = $source->get($url);
         $data['type'] = 'videos';
+        $data = array_merge($data, $append);
 
         $post = $this->app[PostRepository::class]->create($data);
 

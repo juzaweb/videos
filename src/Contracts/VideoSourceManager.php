@@ -10,6 +10,8 @@
 
 namespace Juzaweb\Videos\Contracts;
 
+use Juzaweb\Backend\Models\Post;
+
 interface VideoSourceManager
 {
     /**
@@ -36,6 +38,8 @@ interface VideoSourceManager
      * @return VideoSource|null Returns a VideoSource if a match is found, otherwise null
      */
     public function guess(string $url): ?VideoSource;
+
+    public function import(VideoSource $source, string $url, array $append = []): Post;
 
     /**
      * Get the list of sources.
